@@ -1,0 +1,66 @@
+﻿@page "/QuizSetup"
+
+@using Projet_POO_API.Services
+
+@inject TriviaAPIService TriviaAPIService;
+@inject NavigationManager Navigation;
+
+<h3>Configuration du Quiz</h3>
+
+@if (categories == null)
+{
+    <p>Chargement de la configuration...</p>
+}
+else
+{
+    <div>
+        <label>Catégorie :</label>
+        <select @bind="SelectionCategorie">
+            <option value="">Choisis une catégorie</option>
+            @foreach (var categorie in categories)
+            {
+                <option value="@categorie.Id">@categorie.Name</option>
+            }
+        </select>
+    </div>
+
+    <div>
+        <label>Difficulté :</label>
+        <select @bind="SelectionDifficulte">
+            <option value="">Choisis une difficulté</option>
+            <option value="easy">Facile</option>
+            <option value="medium">Moyenne</option>
+            <option value="hard">Difficile</option>
+        </select>
+    </div>
+
+    <div>
+        <label>Type de question :</label>
+        <select @bind="SelectionType">
+            <option value="">Choisis un type de question</option>
+            <option value="multiple">QCM</option>
+            <option value="boolean">Vrai/Faux</option>
+        </select>
+    </div>
+
+    <button @onclick="StartQuiz">Commencer le Quiz</button>
+}
+
+@code {
+    private List<Categorie> categories;
+    private string SelectionCategorie = "";
+    private string SelectionDifficulte = "";
+    private string SelectionType = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        categories = await TriviaAPIService.GetCategoriesAsync();
+    }
+
+    private void StartQuiz()
+    {
+        TriviaAPIService.GenererUrl(SelectionCategorie, SelectionDifficulte, SelectionType);
+        Navigation.NavigateTo("/");
+
+    }
+}
