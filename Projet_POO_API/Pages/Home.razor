@@ -1,42 +1,5 @@
 ﻿@page "/"
-@using Projet_POO_API.Services
-@inject TriviaAPIService TriviaAPIService
 
-<PageTitle>Home</PageTitle>
+<PageTitle> GeneratorQuizz </PageTitle>
 
-<h3>Quizz OpenTDB</h3>
-
-@if (questions == null)
-{
-    <p>Chargement...</p>
-}
-else
-{
-    @foreach (var question in questions)
-    {
-        <div class="card">
-            <h5>@question.DecodedText</h5>
-            <ul>
-                @foreach (var answer in GetShuffledAnswers(question))
-                {
-                    <li>@answer</li>
-                }
-            </ul>
-        </div>
-    }
-}
-
-@code {
-    private List<Question> questions;
-
-    protected override async Task OnInitializedAsync()
-    {
-        questions = await TriviaAPIService.GetQuizAsync();
-    }
-
-    private List<string> GetShuffledAnswers(Question question)
-    {
-        var answers = new List<string>(question.DecodedIncorrectAnswers) { question.DecodedCorrectAnswer };
-        return answers.OrderBy(a => Guid.NewGuid()).ToList();
-    }
-}
+<h3>Bienvenue dans le GeneratorQuizz !</h3>

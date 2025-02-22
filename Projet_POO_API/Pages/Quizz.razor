@@ -1,0 +1,136 @@
+﻿@page "/quizz"
+@using Projet_POO_API.Services
+@inject TriviaAPIService TriviaAPIService
+
+<PageTitle>Jouons!</PageTitle>
+
+<h3>QuizzGenerator</h3>
+
+@if (questions == null)
+{
+    <p>Chargement du Quizz...</p>
+}
+else
+{
+    @if (indexQuestion < questions.Count)
+    {
+        var question = questions[indexQuestion];
+
+        <div class="EspaceQuestionReponse">
+            <h5>@(@indexQuestion+1). @question.DecodedText</h5>
+
+            <ul>
+                @foreach (var reponse in reponsesMélangées)
+                {
+                    <li>
+                        <input type="radio" id="@indexQuestion" name="reponse" value="@reponse"
+                               @onchange="() => ChoisirReponse(reponse)" disabled="@afficherResultat" />
+                        <label for="@indexQuestion">@reponse</label>
+                    </li>
+                }
+            </ul>
+
+            @if (!afficherResultat)
+            {
+                <button @onclick="validerReponse" disabled="@(string.IsNullOrEmpty(reponseSelectionnee))">
+                    Valider
+                </button>
+            }
+            else
+            {
+                @if (bonneReponse)
+                {
+                    NBBonneReponse++;
+                    
+                    <p style="font-weight: bold; color: green;">
+                        Bonne réponse !
+                    </p>
+                }
+                else
+                {
+                    <p style="font-weight: bold; color: red;">
+                        Mauvaise réponse !
+                    </p>
+
+                }
+
+                <button @onclick="QuestionSuivante">Suivant</button>
+            }
+        </div>
+    }
+    else
+    {
+        <p>Le quizz est terminé !</p>
+        <p>Vous avez eu @NBBonneReponse bonne(s) réponse(s) sur les 10 questions</p>
+        if (NBBonneReponse <= 5)
+        {
+            <p>Vous pouvez mieux faire ! </p>
+        }
+        else
+        {
+            <p>Bravo</p>
+        }
+        
+        <button @onclick="AjouterAuxFavoris">
+            Ajouter ce quizz aux favoris
+        </button>
+    }
+}
+
+@code {
+    private List<Question> questions;
+    private int indexQuestion = 0;
+    private string reponseSelectionnee;
+    private bool afficherResultat = false;
+    private bool bonneReponse = false;
+    private int NBBonneReponse = 0;
+    private List<string> reponsesNonMélangées = new();
+    private List<string> reponsesMélangées = new();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        questions = await TriviaAPIService.GetQuizAsync();
+        MélangerRéponses();
+    }
+
+    private void MélangerRéponses()
+    {
+            var question = questions[indexQuestion];
+            reponsesNonMélangées = new List<string>(question.DecodedIncorrectAnswers) { question.DecodedCorrectAnswer };
+            reponsesMélangées = reponsesNonMélangées.OrderBy(a => Guid.NewGuid()).ToList();
+        
+    }
+
+    private void ChoisirReponse(string reponse)
+    {
+        if (!afficherResultat) 
+        {
+            reponseSelectionnee = reponse;
+        }
+    }
+
+    private void validerReponse()
+    {
+        if (!string.IsNullOrEmpty(reponseSelectionnee))
+        {
+            bonneReponse = reponseSelectionnee == questions[indexQuestion].DecodedCorrectAnswer;
+            afficherResultat = true;
+        }
+    }
+
+    private void QuestionSuivante()
+    {
+        indexQuestion++;
+        reponseSelectionnee = null;
+        afficherResultat = false;
+        bonneReponse = false;
+        if (indexQuestion +1 < questions.Count)
+        {MélangerRéponses();} 
+    }
+
+    private void AjouterAuxFavoris()
+    {
+        
+    }
+}

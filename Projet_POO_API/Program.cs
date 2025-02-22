@@ -11,5 +11,6 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://opentdb.com/") });
 
 builder.Services.AddScoped<TriviaAPIService>();
+builder.Services.AddScoped<FavorisService>();
 
 await builder.Build().RunAsync();
