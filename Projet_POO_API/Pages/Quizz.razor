@@ -1,6 +1,7 @@
 ﻿@page "/quizz"
 @using Projet_POO_API.Services
 @inject TriviaAPIService TriviaAPIService
+@inject FavorisService FavorisService
 
 <PageTitle>Jouons!</PageTitle>
 
@@ -32,7 +33,7 @@ else
 
             @if (!afficherResultat)
             {
-                <button @onclick="validerReponse" disabled="@(string.IsNullOrEmpty(reponseSelectionnee))">
+                <button @onclick="ValiderReponse" disabled="@(string.IsNullOrEmpty(reponseSelectionnee))">
                     Valider
                 </button>
             }
@@ -68,12 +69,14 @@ else
         }
         else
         {
-            <p>Bravo</p>
+            <p>Bravo!</p>
         }
         
         <button @onclick="AjouterAuxFavoris">
             Ajouter ce quizz aux favoris
         </button>
+        @if(quizzAjoute)
+        {<p>Le quizz a été ajouté aux favoris !</p>};
     }
 }
 
@@ -86,6 +89,7 @@ else
     private int NBBonneReponse = 0;
     private List<string> reponsesNonMélangées = new();
     private List<string> reponsesMélangées = new();
+    private bool quizzAjoute = false;
 
 
     protected override async Task OnInitializedAsync()
@@ -110,7 +114,7 @@ else
         }
     }
 
-    private void validerReponse()
+    private void ValiderReponse()
     {
         if (!string.IsNullOrEmpty(reponseSelectionnee))
         {
@@ -129,8 +133,22 @@ else
         {MélangerRéponses();} 
     }
 
-    private void AjouterAuxFavoris()
+    private async Task AjouterAuxFavoris()
     {
-        
+        var quizzFavori = new FavorisService.FavorisQuizz
+        {
+            Categorie = questions[0].Category,  
+            Difficulte = questions[0].Difficulty, 
+            Type = questions[0].Type, 
+            Questions = questions.Select(q => new FavorisService.Question
+            {
+                Texte = q.DecodedText,
+                ReponseCorrecte = q.DecodedCorrectAnswer,
+                ReponsesIncorrectes = q.DecodedIncorrectAnswers
+            }).ToList()
+        };
+
+        await FavorisService.AjouterAuxFavoris(quizzFavori);
+        quizzAjoute = true;
     }
 }

@@ -1,6 +1,56 @@
 ﻿@page "/MesFavoris"
+@using Projet_POO_API.Services
+
+@inject FavorisService FavorisService
 <h3>Mes Favoris</h3>
 
+@if (favoris != null && favoris.Any())
+{
+    <ul>
+        @foreach (var favorisQuizz in favoris)
+        {
+            <li>
+                <strong>Catégorie :</strong> @favorisQuizz.Categorie
+                <br>
+                <strong>Difficulté :</strong> @favorisQuizz.Difficulte
+                <br>
+                <strong>Type :</strong> @favorisQuizz.Type
+                <br/>
+                
+                <strong>Questions :</strong>
+                <ul>
+                    @foreach (var question in favorisQuizz.Questions)
+                    {
+                        <li>
+                            @question.Texte
+                            <br />
+                        </li>
+                    }
+                </ul>
+                <br/>
+                <button @onclick="() => SupprimerFavoris(favorisQuizz)">Supprimer des favoris</button>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>Vous n'avez pas encore de favoris.</p>
+}
 @code {
-    
+    private List<FavorisService.FavorisQuizz> favoris;
+
+    protected override async Task OnInitializedAsync()
+    {
+        favoris = await FavorisService.RecupererFavoris();
+    }
+
+    private async Task SupprimerFavoris(FavorisService.FavorisQuizz favorisQuizz)
+    {
+        await FavorisService.SupprimerFavoris(favorisQuizz);
+
+        favoris = await FavorisService.RecupererFavoris();
+
+        StateHasChanged();
+    }
 }
