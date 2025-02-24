@@ -2,6 +2,7 @@
 @using Projet_POO_API.Services
 
 @inject FavorisService FavorisService
+
 <h3>Mes Favoris</h3>
 
 @if (favoris != null && favoris.Any())
@@ -53,4 +54,5 @@ else
 
         StateHasChanged();
     }
-}
+
+}}
