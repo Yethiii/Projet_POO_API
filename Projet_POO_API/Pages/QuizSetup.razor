@@ -6,6 +6,7 @@
 @inject NavigationManager Navigation;
 
 <h3>Configuration du Quiz</h3>
+<br/>   
 
 @if (categories == null)
 {
@@ -13,7 +14,7 @@
 }
 else
 {
-    <div>
+    <div class="selection">
         <label>Catégorie :</label>
         <select @bind="SelectionCategorie">
             <option value="">Choisis une catégorie</option>
@@ -24,7 +25,7 @@ else
         </select>
     </div>
 
-    <div>
+    <div class="selection">
         <label>Difficulté :</label>
         <select @bind="SelectionDifficulte">
             <option value="">Choisis une difficulté</option>
@@ -34,7 +35,7 @@ else
         </select>
     </div>
 
-    <div>
+    <div class="selection">
         <label>Type de question :</label>
         <select @bind="SelectionType">
             <option value="">Choisis un type de question</option>
@@ -42,7 +43,7 @@ else
             <option value="boolean">Vrai/Faux</option>
         </select>
     </div>
-
+    <br/>
     <button @onclick="StartQuiz">Commencer le Quiz</button>
 }
 

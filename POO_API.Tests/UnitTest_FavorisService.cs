@@ -31,13 +31,36 @@ public class FavorisServiceTests
         Assert.Empty(resultat);
     }
 
-    //[Fact]
+    [Fact]
 
-    //public async Task AjouterFavorisTest()
-    //{}
-    
-    //[Fact]
-    //public async Task SupprimerFavorisTest()
-    //{}
+    public async Task AjouterFavorisTest()
+    {
+        var mockJsRuntime = new Mock<IJSRuntime>(); 
+        mockJsRuntime
+            .Setup(js => js.InvokeAsync<string>("localStorage.getItem", It.IsAny<object[]>()))
+            .ReturnsAsync("");  
+        
+        var service = new FavorisService(mockJsRuntime.Object);
+
+        var NouveauFavoris = new FavorisService.FavorisQuizz
+        {
+            Categorie = "Science", Difficulte = "easy", Type = "multiple", Questions = new List<FavorisService.Question>
+            {
+                new FavorisService.Question { Texte = "Quelle est ce type de Quiz ?", ReponseCorrecte = "multiple" }
+            }
+        };
+        await service.AjouterAuxFavoris(NouveauFavoris);
+        
+        mockJsRuntime.Verify(js => js.InvokeAsync<object>(
+            "localStorage.setItem",
+            It.IsAny<object[]>()
+        ), Times.Once);
+        //permet de vérifier que localStorage.setItem a été appelé 
+        
+    }
+
+   // [Fact]
+
+   // public async Task SupprimerFavorisTest()
+    //{ }
 }
-     

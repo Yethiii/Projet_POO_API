@@ -2,19 +2,23 @@
     position: relative;
     display: flex;
     flex-direction: column;
+    
 }
 
 body{
-    background-color: #93b3a8;
+   
 }
 
 main {
     flex: 1;
+    background-color: #93b3a8;
 }
 
 .sidebar {
     background-color: #3e6558;
 }
+
+
 
 .top-row {
     background-color: #3e6558;
