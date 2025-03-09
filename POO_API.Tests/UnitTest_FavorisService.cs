@@ -60,7 +60,6 @@ public class FavorisServiceTests
     }
 
    // [Fact]
-
    // public async Task SupprimerFavorisTest()
     //{ }
 }

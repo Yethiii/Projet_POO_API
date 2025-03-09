@@ -83,7 +83,7 @@ else
 @code {
     private List<Question> questions;
     private int indexQuestion = 0;
-    private string reponseSelectionnee;
+    private string? reponseSelectionnee;
     private bool afficherResultat = false;
     private bool bonneReponse = false;
     private int NBBonneReponse = 0;
@@ -129,8 +129,10 @@ else
         reponseSelectionnee = null;
         afficherResultat = false;
         bonneReponse = false;
-        if (indexQuestion +1 < questions.Count)
-        {MélangerRéponses();} 
+        if (indexQuestion + 1 < questions.Count)
+        {
+            MélangerRéponses();
+        }
     }
 
     private async Task AjouterAuxFavoris()
@@ -141,11 +143,13 @@ else
             Difficulte = questions[0].Difficulty, 
             Type = questions[0].Type, 
             Questions = questions.Select(q => new FavorisService.Question
+            //parcourt chaque q de la liste questions et on la transforme en format compatible avec le service
             {
                 Texte = q.DecodedText,
                 ReponseCorrecte = q.DecodedCorrectAnswer,
                 ReponsesIncorrectes = q.DecodedIncorrectAnswers
             }).ToList()
+                //Convertit en liste
         };
 
         await FavorisService.AjouterAuxFavoris(quizzFavori);

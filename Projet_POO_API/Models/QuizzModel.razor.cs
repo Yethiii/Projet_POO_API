@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Text.Json.Serialization;
 
-public class QuizResponse
+public class QuizResponse //réponse de l’API lorsqu’on récupère le quizz
 {
     [JsonPropertyName("results")]
     public List<Question> Results { get; set; }
@@ -30,7 +30,7 @@ public class Question
     [JsonPropertyName("incorrect_answers")]
     public List<string> IncorrectAnswers { get; set; }
     
-    public string DecodedText => WebUtility.HtmlDecode(Text);
+    public string DecodedText => WebUtility.HtmlDecode(Text); //éviter les caractères HTML codés
     public string DecodedCorrectAnswer => WebUtility.HtmlDecode(CorrectAnswer);
     public List<string> DecodedIncorrectAnswers => IncorrectAnswers.ConvertAll(WebUtility.HtmlDecode);
 }

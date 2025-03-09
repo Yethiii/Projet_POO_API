@@ -8,17 +8,18 @@ namespace Projet_POO_API.Services;
 
 public class FavorisService
 {
-    private readonly IJSRuntime _jsRuntime;
+    private readonly IJSRuntime _jsRuntime; //pour interagir avec LocalStorage
     
-    public FavorisService(IJSRuntime jsRuntime)
+    public FavorisService(IJSRuntime jsRuntime) 
     {
         _jsRuntime = jsRuntime;
     }
 
     public async Task<List<FavorisQuizz>> RecupererFavoris()
     {
-        var result = await _jsRuntime.InvokeAsync<string>("localStorage.getItem","Favoris");
+        var result = await _jsRuntime.InvokeAsync<string>("localStorage.getItem","Favoris"); //Récupère la liste des favoris de JSON
         return string.IsNullOrEmpty(result) ? new List<FavorisQuizz>(): JsonSerializer.Deserialize<List<FavorisQuizz>>(result);
+        //si pas vide, déserialise en une liste d'objets
     }
     
     public async Task AjouterAuxFavoris(FavorisQuizz NouveauFavori)    
@@ -29,8 +30,8 @@ public class FavorisService
                              favori.Type == NouveauFavori.Type))
         {
             listFavoris.Add(NouveauFavori);
-            var SerializeFavoris = JsonSerializer.Serialize(listFavoris);
-            await _jsRuntime.InvokeVoidAsync("localStorage.setItem", "Favoris", SerializeFavoris);
+            var SerializeFavoris = JsonSerializer.Serialize(listFavoris); //Convertir en JSON
+            await _jsRuntime.InvokeVoidAsync("localStorage.setItem", "Favoris", SerializeFavoris); //Stock dans LocalStorage
         }
     }
 
@@ -41,6 +42,7 @@ public class FavorisService
             favori.Categorie != FavoriASupprimer.Categorie || 
             favori.Difficulte != FavoriASupprimer.Difficulte || 
             favori.Type != FavoriASupprimer.Type).ToList();
+        //Where garde uniquement les quiz différents de celui à supprimer
         
         var SerializeFavoris = JsonSerializer.Serialize(listFavoris);   
         await _jsRuntime.InvokeVoidAsync("localStorage.setItem", "Favoris", SerializeFavoris);
