@@ -49,6 +49,7 @@ public class FavorisServiceTests
                 new FavorisService.Question { Texte = "Quelle est ce type de Quiz ?", ReponseCorrecte = "multiple" }
             }
         };
+        
         await service.AjouterAuxFavoris(NouveauFavoris);
         
         mockJsRuntime.Verify(js => js.InvokeAsync<object>(
@@ -58,8 +59,4 @@ public class FavorisServiceTests
         //permet de vérifier que localStorage.setItem a été appelé 
         
     }
-
-   // [Fact]
-   // public async Task SupprimerFavorisTest()
-    //{ }
 }
