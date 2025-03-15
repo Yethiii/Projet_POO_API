@@ -60,21 +60,41 @@ dotnet test
 
 ### 📋 Scénarios de test  
 
-#### 1⃣ Test de récupération des catégories depuis l'API  
-**Étapes :**  
-✔ Appeler `GetCategoriesAsync()`  
-✔ Vérifier que la réponse contient une liste non vide  
+🔹 Test de récupération des catégories depuis l'API
 
-#### 2⃣ Test de génération de l'URL de requête à l'API  
-**Étapes :**  
-✔ Appeler `GenererUrl("1", "easy", "multiple")`  
-✔ Vérifier que `SetupUrl` contient bien l'URL attendue  
+Étapes :
 
-#### 3⃣ Test d'ajout d'un quiz aux favoris  
-**Étapes :**  
-✔ Simuler un `IJSRuntime` avec un Mock  
-✔ Appeler `AjouterAuxFavoris()` avec un quiz factice  
-✔ Vérifier que `localStorage.setItem` a été appelé une fois  
+Appeler GetCategoriesAsync().
+
+Vérifier que la réponse contient une liste non vide.
+
+🔹 Test de génération de l'URL de requête à l'API
+
+Étapes :
+
+Appeler GenererUrl("1", "easy", "multiple").
+
+Vérifier que SetupUrl contient bien l'URL attendue.
+
+🔹 Test d'ajout d'un quiz aux favoris
+
+Étapes :
+
+Simuler un IJSRuntime avec un Mock.
+
+Appeler AjouterAuxFavoris() avec un quiz factice.
+
+Vérifier que localStorage.setItem a été appelé une fois.
+
+🔹 Test de récupération des favoris
+
+Étapes :
+
+Simuler un IJSRuntime renvoyant une chaîne vide.
+
+Appeler RecupererFavoris().
+
+Vérifier que la liste retournée est bien vide.
 
 ---
 
